@@ -1,14 +1,21 @@
+const list = document.querySelector("ul")!;
+const btn = document.getElementById("todo-btn")! as HTMLButtonElement;
+const input = document.getElementById("todo-input")! as HTMLInputElement;
+const form = document.querySelector("form")!;
+
 interface Todo {
   text: string;
   completed: boolean;
 }
 
-const todos: Todo[] = [];
+const todos: Todo[] = getTodosFromStorage();
+todos.forEach(createTodoElement);
 
-const list = document.querySelector("ul")!;
-const btn = document.getElementById("todo-btn")! as HTMLButtonElement;
-const input = document.getElementById("todo-input")! as HTMLInputElement;
-const form = document.querySelector("form")!;
+function getTodosFromStorage(): Todo[] {
+  const storedTodos = localStorage.getItem("todos");
+  if (storedTodos === null) return [];
+  return JSON.parse(storedTodos);
+}
 
 function handleSubmit(e: SubmitEvent) {
   e.preventDefault();
@@ -21,6 +28,8 @@ function handleSubmit(e: SubmitEvent) {
   createTodoElement(newTodo);
   todos.push(newTodo);
 
+  localStorage.setItem("todos", JSON.stringify(todos));
+  
   input.value = "";
 };
 
