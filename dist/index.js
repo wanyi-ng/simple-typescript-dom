@@ -11,6 +11,9 @@ function getTodosFromStorage() {
         return [];
     return JSON.parse(storedTodos);
 }
+function updateTodos() {
+    localStorage.setItem("todos", JSON.stringify(todos));
+}
 function handleSubmit(e) {
     e.preventDefault();
     const newTodo = {
@@ -27,6 +30,11 @@ function createTodoElement(todo) {
     const li = document.createElement("li");
     const checkbox = document.createElement("input");
     checkbox.type = "checkbox";
+    checkbox.checked = todo.completed;
+    checkbox.addEventListener("change", function () {
+        todo.completed = checkbox.checked;
+        updateTodos();
+    });
     li.textContent = todo.text;
     li.prepend(checkbox);
     list.appendChild(li);
